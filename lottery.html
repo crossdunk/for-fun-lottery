@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>
+    摸彩
+  </title>
+</head>
+<style>
+html{
+  font-family: '微軟正黑體';
+  background-color: #DFE0DA;
+}
+#show_num{
+  margin:auto;
+  text-align: center;
+  width:700px;
+  height:500px;
+  background-color: #F27162;
+  color:#3A1010;
+  font-weight: 900;
+  font-size:350px;
+}
+#btn_div{
+  margin-top: 50px;
+  text-align: center;
+}
+.btn{
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 20px;
+  margin-left: 250px;
+  margin-right: 250px;
+  padding:50px 100px 50px 100px;
+  background-color: #FFFF00;
+  border-radius: 20px;
+  border-color: #272623;
+}
+.btn:hover{
+  border-radius: 0px;
+  background-color: #272822;
+  color:#FFFFFF;
+}
+#stop{
+  display: none;
+}
+#show_tips{
+  color:#292221;
+  font-size: 24px;
+  font-weight: 900;
+}
+#show_overlay{
+  position:fixed;
+  right:5px;
+  bottom:5px;
+  padding:10px 20px 10px 20px;
+  background-color: #124505;
+  border-color: #FAFAFA;
+  color:#FFFFFF;
+}
+.overlay{
+  display:none;
+  width:100%;
+  height:100%;
+  background: rgba(52,45,44,0.8);
+  position:fixed;
+  z-index: 99;
+  top:0px;
+  left:0px;
+}
+.overlay_content{
+  margin:auto;
+  margin-top:100px;
+  padding: 50px;
+  width:400px;
+  height:350px;
+  border-radius: 10px;
+  overflow-y:auto;
+  text-align: center;
+  color:#FFFDFD;
+  font-size: 40px;
+}
+.overlay_footer{
+  text-align: center;
+}
+.overlay_cance{
+  cursor: pointer;
+  padding:30px 60px 30px 60px;
+  background-color: #000000;
+  border-color: #000000;
+  color:#FFFFFF;
+}
+.overlay_cance:hover{
+  padding:30px 60px 30px 60px;
+  background-color: #FBFBFB;
+  border-color: #000000;
+  color:#000000;
+}
+</style>
+<body>
+<div id='show_num'>
+
+</div>
+<div id='btn_div'>
+<button id='start' class='btn'>Start</button>
+<button id='stop' class='btn'>Stop</button>
+</div>
+<div id='show_tips'>
+
+</div>
+<button id='show_overlay'>紀錄</button>
+
+<div class='overlay'>
+  <div class='overlay_content'>
+
+  </div>
+  <div class='overlay_footer'>
+    <button class='overlay_cance'>關閉</button>
+  </div>
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+ <script>
+var already = new Array();
+var count = 0;
+var l = eval(10);
+var s = eval(1);
+var len = l - s + 1;
+
+$('#stop').bind('click',function(){
+  $(this).hide();
+  $('#start').show();
+  clearTimeout(timeToExc);
+  winner = Math.floor(Math.random()*(l - s + 1) + s );
+  if(count > 0){
+    var i = 0;
+    while(i < count){
+      if(already[i] == winner){
+        winner = Math.floor(Math.random()*(l - s + 1) + s );
+        i = 0; 
+      }else{
+        i = i + 1;
+      }
+    }
+  }
+  already[count] = winner;
+  count = count + 1;
+  $('#show_num').html(winner);
+  if(len==count){
+    $('#show_tips').html('共'+len+'個號碼，已全數開完！');
+  }else{
+    $('#show_tips').html('已經開出'+count+'個號碼！');
+  }
+  $('.overlay_content').append('第'+count+'個號碼為'+winner+'！<br />');
+});
+
+$('#start').bind('click',function(){
+  if(len==count){
+  alert('已全部開完，請重整此頁面！');
+  return false;
+  }else{
+    $(this).hide();
+    $('#stop').show();
+    rand_number();
+  }  
+});
+
+var rand_number = function(){
+  $('#show_num').html(Math.floor(Math.random()*(l - s + 1) + s ));
+  timeToExc = setTimeout("rand_number()",50);
+ }
+
+
+$('#show_overlay').bind('click',function(){
+  $('.overlay').show();
+})
+$('.overlay_cance').bind('click',function(){
+  $('.overlay').hide();
+})
+ </script>
+</html>
